@@ -1,11 +1,12 @@
 {
-  "name": "react-component-library",
+  "name": "desktop.js",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
   },
   "keywords": [],
   "author": "Janne Vanhanen <janne.vanhanen@outlook.com>",
