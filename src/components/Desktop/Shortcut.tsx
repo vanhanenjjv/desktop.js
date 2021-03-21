@@ -1,19 +1,18 @@
 import React from 'react'
-import { useDesktop } from '../../hooks';
+// import { useDesktop } from '../../hooks';
+import { Context } from '../../context';
 import { Desktop, Window } from '../../types';
 
 export interface DesktopShortcutProps { 
   name: string
-  window: Partial<Window> 
+  window: Partial<Window>
 }
 
 export const DesktopShortcut: React.FC<DesktopShortcutProps> = props => {
-  const desktop = useDesktop();
+  const desktop = React.useContext(Context);
 
   const run = () => {
-    console.log('wtf');
-    desktop.createWindow(props.window);
-    console.log(desktop.windows)
+    desktop.create(props.window);
   }
 
   return (
@@ -25,7 +24,7 @@ export const DesktopShortcut: React.FC<DesktopShortcutProps> = props => {
         borderRadius: '4px',
         border: '1px solid black'
       }}
-      onClick={() => run()}>
+      onClick={run}>
       {props.name}
     </div>
   );

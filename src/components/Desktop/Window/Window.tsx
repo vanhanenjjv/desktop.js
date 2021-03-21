@@ -14,87 +14,71 @@ interface DesktopWindowInnerComponents {
 }
 
 export interface DesktopWindowProps extends Window {
-  beforeMove?: (position: Position) => Position
-  beforeResize?: (size: Size) => Size
+  onMouseDown?: (offset: [number, number]) => void
+
+  onBeginDrag?: () => void
+  onBeginResize?: () => void
+
+  onResize?: (size: Size) => void
+
+  onFocus?: () => void
+  onHide?: () => void
+  onClose?: () => void
 }
 
 export const DesktopWindow: React.FC<DesktopWindowProps> & DesktopWindowInnerComponents = props => {
-  const [position, setPosition]   = React.useState<Position>(props.position);
-  const [size, setSize]           = React.useState<Size>(props.size);
-  const [draggable, setDraggable] = React.useState<boolean>(false);
-  const [offset, setOffset]       = React.useState<Position>([0, 0]);
-
-  const [resizePosition, setResizePosition] = React.useState<Position>([0, 0]);
-
-  const { title, focus, destroy, beforeMove, beforeResize, children } = props;
+  const ref = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    console.log('size', size);
-  }, [size]);
+    if (props.onResize) {
+      props.onResize(props.size);
+    }
+
+  }, [props.size, props.onResize]);
+
+  function click(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
+    if (!ref.current)
+      return;
+
+    if (!props.onMouseDown)
+      return;
+
+    const windowPosition: Position = [ref.current.offsetLeft, ref.current.offsetTop];
+    const mousePosition: Position = [event.clientX, event.clientY];
+
+    if (props.onFocus) props.onFocus();
+
+    props.onMouseDown([
+      mousePosition[0] - windowPosition[0],
+      mousePosition[1] - windowPosition[1]
+    ]);
+  }
 
   return (
     <div
-      className={`window window:${title.toLowerCase()}`}
-      onMouseUp={release}
-      onMouseMove={drag}
-      onMouseLeave={release}
-      onClick={focus}
+      ref={ref}
+      className={`window window:${props.title.toLowerCase()}`}
+      onMouseDown={click}
       style={{
         display: 'flex',
         flexDirection: 'column',
         position: 'absolute',
-        left: position[0],
-        top: position[1],
-        width: size[0],
-        height: size[1],
+        left: props.position[0],
+        top: props.position[1],
+        width: props.size[0],
+        height: props.size[1],
         border: '1px solid black'
       }}>
       <DesktopWindow.Titlebar
-        title={title} 
-        onGrab={grab}
-        onClose={destroy} />
-      <DesktopWindow.Content style={{ flex: 1 }}>
+        title={props.title} 
+        onGrab={props.onBeginDrag}
+        onClose={props.onClose} />
+      <DesktopWindow.Content>
         {props.content}
       </DesktopWindow.Content>
-      <DesktopWindow.Footer
-        onResizeBegin={setResizePosition}
-        onResizeEnd={() => setResizePosition([0, 0])}
-        onResize={onResize} />
+      <DesktopWindow.Footer onGrab={props.onBeginResize} />
     </div>
   )
-
-  function onResize([w, h]: Position) {
-
-    console.log('Resize', [w, h])
-
-    setSize([
-      size[0] + w,
-      size[1] + h
-    ]);
-  }
-
-  function grab({ clientX, clientY }: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    setOffset([
-      position[0] - clientX, 
-      position[1] - clientY
-    ]);
-    setDraggable(true);
-  }
-
-  function release() {
-    setDraggable(false);
-  }
-
-  function drag({ clientX, clientY }: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (!draggable)
-      return;
-
-    const newPosition: Position = [clientX + offset[0], clientY + offset[1]]
-
-    setPosition(
-      beforeMove ? beforeMove(newPosition) : newPosition
-    )
-  }
 }
 
 DesktopWindow.Titlebar = WindowTitlebar

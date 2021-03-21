@@ -1,6 +1,6 @@
 import React from 'react';
-import { DesktopWindow } from '../../components/Desktop/Window';
-import { useAutoIncrementingId } from '../../hooks/useAutoIncrementingId';
+// import { DesktopWindow } from '../../components/Desktop/Window';
+// import { useAutoIncrementingId } from '../../hooks/useAutoIncrementingId';
 
 import { Desktop, Window } from '../../types';
 
@@ -8,60 +8,60 @@ import { Desktop, Window } from '../../types';
 export const Context = React.createContext<Desktop>({} as Desktop);
 
 
-export const DesktopProvider: React.FC = ({ children }) => {
-  const [windows, setWindows] = React.useState<Window[]>([]);
-  const getId = useAutoIncrementingId();
+// export const DesktopProvider: React.FC = ({ children }) => {
+//   const [windows, setWindows] = React.useState<Window[]>([]);
+//   const getId = useAutoIncrementingId();
 
-  function focusWindow(_id: number): void {
+//   const focusWindow = (_id: number): void => {
     
-  }
+//   };
 
-  function destroyWindow(id: number): void {
-    console.log(id);
+//   // const destroyWindow = (id: number): void => {
+//     console.log(id);
 
-    console.log(windows)
+//     console.log(windows)
 
-    const battleryoales = windows.filter(window => window.id !== id)
+//     const battleryoales = windows.filter(window => window.id !== id);
 
-    console.log('battle ryoales', battleryoales);
+//     console.log('battle ryoales', battleryoales);
 
-    setWindows(battleryoales);
-  }
+//     setWindows(battleryoales);
+//   };
 
-  function createWindow(partialWindow: Partial<Window>): Window {
-    console.log('yeyyeyeyyeeyt')
-    const id = getId();
+//   const createWindow = (partialWindow: Partial<Window>): Window => {
+//     console.log('yeyyeyeyyeeyt');
+//     const id = getId();
 
-    const window = {
-      id,
-      title:    partialWindow.title    ?? "window",
-      size:     partialWindow.size     ?? [400, 300],
-      position: partialWindow.position ?? [0, 0],
-      content:  partialWindow.content,
-      index:    0,
-      destroy:  () => destroyWindow(Number(id)),
-      focus:    () => focusWindow(Number(id))
-    }
+//     const window = {
+//       id,
+//       title:    partialWindow.title    ?? "window",
+//       size:     partialWindow.size     ?? [400, 300],
+//       position: partialWindow.position ?? [0, 0],
+//       content:  partialWindow.content,
+//       index:    0,
+//       destroy:  () => destroyWindow(Number(id)),
+//       focus:    () => focusWindow(Number(id))
+//     };
 
-    setWindows([...windows, window])
+//     setWindows([...windows, window])
 
-    console.log('ooooooo')
+//     console.log('ooooooo')
 
-    return window;
-  }
+//     return window;
+//   };
 
-  console.log('wtff')
+//   console.log('wtff')
 
-  return (
-    <Context.Provider 
-      value={{
-        windows,
-        createWindow,
-        destroyWindow,
-        focusWindow
-      }}>
-      {children}
-      {windows.map(window => <DesktopWindow key={window.id} {...window} />)}
-    </Context.Provider>
-  );
-}
+//   return (
+//     <Context.Provider 
+//       value={{
+//         windows: () => windows,
+//         createWindow,
+//         destroyWindow,
+//         focusWindow
+//       }}>
+//       {children}
+//       {windows.map(window => <DesktopWindow key={window.id} {...window} />)}
+//     </Context.Provider>
+//   );
+// }

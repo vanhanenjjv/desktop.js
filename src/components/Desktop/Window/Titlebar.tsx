@@ -3,12 +3,11 @@ import React from 'react';
 
 export interface WindowTitlebarProps {
   title: string
-  onGrab: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  onClose: () => void
+  onGrab?: () => void
+  onClose?: () => void
 }
 
 export const WindowTitlebar: React.FC<WindowTitlebarProps> = ({ title, onClose, onGrab }) => {
-
   return (
     <div 
       style={{ 
@@ -16,7 +15,8 @@ export const WindowTitlebar: React.FC<WindowTitlebarProps> = ({ title, onClose, 
         display: 'flex',
         padding: '0 8px',
         alignItems: 'center',
-        background: 'gray'
+        background: 'gray',
+        userSelect: 'none'
       }} 
       onMouseDown={onGrab}>
     <p 

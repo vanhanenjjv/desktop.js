@@ -3,14 +3,14 @@ import { Position } from './position';
 
 interface Window { 
   id: number
-  index: number
   title: string
-  size: Size
+  size: Size,
+  minimumSize?: Size,
+  maximumSize?: Size,
   position: Position
   content?: React.ReactNode
-  focus(): void
-  destroy(): void
-  afterResize?(size: Size): void
+
+  onResize?: (size: Size) => void
 }
 
 
